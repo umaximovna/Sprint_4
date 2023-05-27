@@ -7,22 +7,17 @@ from pages.order_page import OrderPage
 
 
 class TestPositiveOrderScenario:
-    driver = None
-
-    @classmethod
-    def setup_class(cls):
-        cls.driver = webdriver.Firefox()
 
     @pytest.mark.parametrize('button_locator', [MainPageLocators.ORDER_BUTTON_IN_TOP,
                                                 MainPageLocators.ORDER_BUTTON_IN_MIDDLE])
     @pytest.mark.parametrize('test_data', [TestData.data_for_order_1, TestData.data_for_order_2])
-    def test_check_order_creation(self, button_locator, test_data):
-        self.driver.get(TestData().link_of_main_page)
-        main_page = MainPage(self.driver)
-        main_page.accept_cookie(button_locator, test_data)
+    def test_check_order_creation(self, driver, button_locator, test_data):
+        driver.get(TestData().link_of_main_page)
+        main_page = MainPage(driver)
+        main_page.accept_cookie()
         main_page.scroll_to_element(*button_locator)
-        main_page.click_order_button(*button_locator)
-        order_page = OrderPage(self.driver)
+        main_page.click_any_button(*button_locator)
+        order_page = OrderPage(driver)
         order_page.filling_basic_data_of_order(test_data.get('name'), test_data.get('last_name'),
                                                test_data.get('street'),
                                                test_data.get('station'), test_data.get('nmbr'))
@@ -32,8 +27,4 @@ class TestPositiveOrderScenario:
         order_page.click_on_button_to_order()
         order_page.click_yes()
         assert "Заказ оформлен" in order_page.check_order_is_processed()
-
-    @classmethod
-    def teardown_class(cls):
-        cls.driver.quit()
 

@@ -4,15 +4,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 from locators.base_page_locators import BasePageLocators
 from locators.order_page_locators import OrderPageLocators
 from selenium.webdriver.common.keys import Keys
+from pages.base_page import BasePage
 
 
-class OrderPage:
-
-    def __init__(self, driver):
-        self.driver = driver
-
-    def get_any_text(self, method, locator):
-        return self.driver.find_element(method, locator).text
+class OrderPage(BasePage):
 
     def click_logo_samokat_button(self):
         self.driver.find_element(*BasePageLocators.SAMOKAT_LOGO).click()
